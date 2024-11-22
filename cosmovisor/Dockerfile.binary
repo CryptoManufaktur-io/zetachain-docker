@@ -21,7 +21,7 @@ RUN adduser \
     "${USER}"
 
 # Install cosmovisor
-RUN wget https://github.com/cosmos/cosmos-sdk/releases/download/cosmovisor%2F${COSMOVISOR_VERSION}/cosmovisor-${COSMOVISOR_VERSION}-linux-arm64.tar.gz
+RUN wget https://github.com/cosmos/cosmos-sdk/releases/download/cosmovisor%2F${COSMOVISOR_VERSION}/cosmovisor-${COSMOVISOR_VERSION}-linux-amd64.tar.gz
 RUN tar xf cosmovisor-${COSMOVISOR_VERSION}-linux-arm64.tar.gz
 RUN mv cosmovisor /usr/local/bin
 
