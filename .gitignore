@@ -1,0 +1,3 @@
+.env*
+ext-network.yml
+*.swp

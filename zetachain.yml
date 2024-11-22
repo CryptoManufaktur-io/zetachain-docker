@@ -1,0 +1,77 @@
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+      max-file: "3"
+      tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+
+services:
+  zetachain:
+    container_name: zetachain
+    build:
+      context: ./cosmovisor
+      dockerfile: Dockerfile.binary
+      args:
+        - COSMOVISOR_VERSION=${COSMOVISOR_VERSION:-v1.5.0}
+        - USER=zetachain
+    image: zetachain:local
+    pull_policy: never
+    user: zetachain
+    restart: unless-stopped
+    stop_grace_period: 5m
+    environment:
+      - ZETACORED_VERSION=${ZETACORED_VERSION}
+      - EXTRA_FLAGS=${EXTRA_FLAGS:-}
+      - NETWORK=${NETWORK}
+      - MONIKER=${MONIKER}
+      - P2P_PORT=${P2P_PORT:-26656}
+      - RPC_PORT=${RPC_PORT:-26657}
+      - SNAPSHOT_URL=${SNAPSHOT_URL}
+      - DAEMON_HOME=/cosmos
+      - DAEMON_NAME=zetacored
+      - DAEMON_ALLOW_DOWNLOAD_BINARIES=true
+      - DAEMON_RESTART_AFTER_UPGRADE=true
+      - DAEMON_DATA_BACKUP_DIR=/cosmos
+      - CLIENT_DAEMON_NAME=zetaclientd
+      - CLIENT_SKIP_UPGRADE=false
+      - CLIENT_START_PROCESS=false
+      - UNSAFE_SKIP_BACKUP=true
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    ports:
+      - ${P2P_PORT:-26656}:${P2P_PORT:-26656}/tcp
+      - ${RPC_PORT:-26657}:${RPC_PORT:-26657}/tcp
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - zetachain-data:/cosmos
+    entrypoint:
+      - docker-entrypoint.sh
+      - cosmovisor
+      - run
+      - start
+      - --home
+      - /cosmos
+      - --log_format
+      - json
+    labels:
+        - traefik.enable=true
+        - traefik.http.routers.${RPC_HOST}.service=${RPC_HOST}
+        - traefik.http.routers.${RPC_HOST}.entrypoints=websecure
+        - traefik.http.routers.${RPC_HOST}.rule=Host(`${RPC_HOST}.${DOMAIN}`)
+        - traefik.http.routers.${RPC_HOST}.tls.certresolver=letsencrypt
+        - traefik.http.routers.${RPC_HOST}lb.service=${RPC_HOST}
+        - traefik.http.routers.${RPC_HOST}lb.entrypoints=websecure
+        - traefik.http.routers.${RPC_HOST}lb.rule=Host(`${RPC_LB}.${DOMAIN}`)
+        - traefik.http.routers.${RPC_HOST}lb.tls.certresolver=letsencrypt
+        - traefik.http.services.${RPC_HOST}.loadbalancer.server.port=${RPC_PORT}
+        - metrics.scrape=true
+        - metrics.path=/metrics
+        - metrics.port=26660
+        - metrics.instance=zetacored
+        - metrics.network=${NETWORK}
+
+volumes:
+  zetachain-data:
