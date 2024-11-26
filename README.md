@@ -6,9 +6,6 @@ Meant to be used with central-proxy-docker for traefik and Prometheus remote wri
 
 ## Version
 
-Zetachain Docker uses a "semver-ish" scheme.
+Zetachain Docker uses a semver scheme.
 
-First digit, major shifts in how things work. The last one was Ethereum merge. I do not expect another shift that large.
-Second through fourth digit, semver.
-
-This is zetachain-docker v0.1
+This is zetachain-docker v0.1.0
