@@ -144,11 +144,16 @@ echo "Updating config..."
 __public_ip=$(curl -s ifconfig.me/ip)
 echo "Public ip: ${__public_ip}"
 
-# Always update public IP address and Moniker.
-dasel put -f /cosmos/config/config.toml -v "${__public_ip}:${P2P_PORT}" p2p.external_address
+# Always update public IP address, moniker and ports.
+dasel put -f /cosmos/config/config.toml -v "${__public_ip}:${CL_P2P_PORT}" p2p.external_address
+dasel put -f /cosmos/config/config.toml -v "tcp://0.0.0.0:${CL_P2P_PORT}" p2p.laddr
+dasel put -f /cosmos/config/config.toml -v "tcp://0.0.0.0:${CL_RPC_PORT}" rpc.laddr
 dasel put -f /cosmos/config/config.toml -v ${MONIKER} moniker
 dasel put -f /cosmos/config/config.toml -v true prometheus
 dasel put -f /cosmos/config/config.toml -v ${LOG_LEVEL} log_level
+dasel put -f /cosmos/config/app.toml -v "0.0.0.0:${RPC_PORT}" json-rpc.address
+dasel put -f /cosmos/config/app.toml -v "0.0.0.0:${WS_PORT}" json-rpc.address
+dasel put -f /cosmos/config/client.toml -v "tcp://localhost:${CL_RPC_PORT}" node
 
 # cosmovisor will create a subprocess to handle upgrades
 # so we need a special way to handle SIGTERM

@@ -25,8 +25,10 @@ services:
       - EXTRA_FLAGS=${EXTRA_FLAGS:-}
       - NETWORK=${NETWORK}
       - MONIKER=${MONIKER}
-      - P2P_PORT=${P2P_PORT:-26656}
-      - RPC_PORT=${RPC_PORT:-26657}
+      - CL_P2P_PORT=${CL_P2P_PORT:-26656}
+      - CL_RPC_PORT=${CL_RPC_PORT:-26657}
+      - RPC_PORT=${RPC_PORT:-8545}/tcp
+      - WS_PORT=${WS_PORT:-8546}/tcp
       - SNAPSHOT=${SNAPSHOT}
       - DAEMON_HOME=/cosmos
       - DAEMON_NAME=zetacored
@@ -39,8 +41,10 @@ services:
       - UNSAFE_SKIP_BACKUP=true
       - LOG_LEVEL=${LOG_LEVEL:-info}
     ports:
-      - ${P2P_PORT:-26656}:${P2P_PORT:-26656}/tcp
-      - ${RPC_PORT:-26657}:${RPC_PORT:-26657}/tcp
+      - ${CL_P2P_PORT:-26656}:${CL_P2P_PORT:-26656}/tcp
+      - ${CL_RPC_PORT:-26657}:${CL_RPC_PORT:-26657}/tcp
+      - ${RPC_PORT:-8545}:${RPC_PORT:-8545}/tcp
+      - ${WS_PORT:-8546}:${WS_PORT:-8546}/tcp
     ulimits:
       nofile:
         soft: 262144
@@ -67,6 +71,15 @@ services:
         - traefik.http.routers.${RPC_HOST}lb.rule=Host(`${RPC_LB}.${DOMAIN}`)
         - traefik.http.routers.${RPC_HOST}lb.tls.certresolver=letsencrypt
         - traefik.http.services.${RPC_HOST}.loadbalancer.server.port=${RPC_PORT}
+        - traefik.http.routers.${WS_HOST:-zetachainws}.service=${WS_HOST:-zetachainws}
+        - traefik.http.routers.${WS_HOST:-zetachainws}.entrypoints=websecure
+        - traefik.http.routers.${WS_HOST:-zetachainws}.rule=Host(`${WS_HOST:-zetachainws}.${DOMAIN}`)
+        - traefik.http.routers.${WS_HOST:-zetachainws}.tls.certresolver=letsencrypt
+        - traefik.http.routers.${WS_HOST:-zetachainws}lb.service=${WS_HOST:-zetachainws}
+        - traefik.http.routers.${WS_HOST:-zetachainws}lb.entrypoints=websecure
+        - traefik.http.routers.${WS_HOST:-zetachainws}lb.rule=Host(`${WS_LB:-zetachainws-lb}.${DOMAIN}`)
+        - traefik.http.routers.${WS_HOST:-zetachainws}lb.tls.certresolver=letsencrypt
+        - traefik.http.services.${WS_HOST:-zetachainws}.loadbalancer.server.port=${WS_PORT:-8546}
         - metrics.scrape=true
         - metrics.path=/metrics
         - metrics.port=26660
