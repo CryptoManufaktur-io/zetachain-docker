@@ -132,7 +132,7 @@ if [ "$__should_update" -eq 2 ]; then
   echo "Done!"
 elif [ "$__should_update" -eq 1 ]; then
   echo "Updating binary for current version."
-  wget https://github.com/zeta-chain/node/releases/download/$DAEMON_VERSION/zetacored-linux-amd64 -O $__upgrades_path/$__upgrade_name/bin/$DAEMON_NAME
+  wget https://github.com/zeta-chain/node/releases/download/$DAEMON_VERSION/zetacored-linux-amd64 -O $__current_path/bin/$DAEMON_NAME
   echo "Done!"
 else
   echo "No updates needed."
