@@ -152,7 +152,7 @@ dasel put -f /cosmos/config/config.toml -v ${MONIKER} moniker
 dasel put -f /cosmos/config/config.toml -v true prometheus
 dasel put -f /cosmos/config/config.toml -v ${LOG_LEVEL} log_level
 dasel put -f /cosmos/config/app.toml -v "0.0.0.0:${RPC_PORT}" json-rpc.address
-dasel put -f /cosmos/config/app.toml -v "0.0.0.0:${WS_PORT}" json-rpc.address
+dasel put -f /cosmos/config/app.toml -v "0.0.0.0:${WS_PORT}" json-rpc.ws-address
 dasel put -f /cosmos/config/client.toml -v "tcp://localhost:${CL_RPC_PORT}" node
 
 # cosmovisor will create a subprocess to handle upgrades
