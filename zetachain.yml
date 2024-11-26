@@ -21,13 +21,13 @@ services:
     restart: unless-stopped
     stop_grace_period: 5m
     environment:
-      - ZETACORED_VERSION=${ZETACORED_VERSION}
+      - DAEMON_VERSION=${ZETACORED_VERSION}
       - EXTRA_FLAGS=${EXTRA_FLAGS:-}
       - NETWORK=${NETWORK}
       - MONIKER=${MONIKER}
       - P2P_PORT=${P2P_PORT:-26656}
       - RPC_PORT=${RPC_PORT:-26657}
-      - SNAPSHOT_URL=${SNAPSHOT_URL}
+      - SNAPSHOT=${SNAPSHOT}
       - DAEMON_HOME=/cosmos
       - DAEMON_NAME=zetacored
       - DAEMON_ALLOW_DOWNLOAD_BINARIES=true
