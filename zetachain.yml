@@ -43,8 +43,6 @@ services:
     ports:
       - ${CL_P2P_PORT:-26656}:${CL_P2P_PORT:-26656}/tcp
       - ${CL_RPC_PORT:-26657}:${CL_RPC_PORT:-26657}/tcp
-      - ${RPC_PORT:-8545}:${RPC_PORT:-8545}/tcp
-      - ${WS_PORT:-8546}:${WS_PORT:-8546}/tcp
     ulimits:
       nofile:
         soft: 262144
