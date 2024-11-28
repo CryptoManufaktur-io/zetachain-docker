@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # This is specific to each chain.
-daemon_download_url=https://github.com/zeta-chain/node/releases/download/$DAEMON_VERSION/zetacored-linux-amd64
+__daemon_download_url=https://github.com/zeta-chain/node/releases/download/$DAEMON_VERSION/zetacored-linux-amd64
 
 # Common cosmovisor paths.
 __cosmovisor_path=/cosmos/cosmovisor
@@ -12,7 +12,7 @@ __upgrades_path=$__cosmovisor_path/upgrades
 
 if [[ ! -f /cosmos/.initialized ]]; then
   echo "Initializing..."
-  wget $daemon_download_url -O $__genesis_path/bin/$DAEMON_NAME
+  wget $__daemon_download_url -O $__genesis_path/bin/$DAEMON_NAME
   chmod a+x $__genesis_path/bin/$DAEMON_NAME
 
   # Point to current.
@@ -131,11 +131,11 @@ if [ "$__should_update" -eq 2 ]; then
   __upgrade_name=$(echo "$__proposal" | jq -r '.messages[0].plan.name')
 
   mkdir -p $__cosmovisor_path/$__upgrade_name/bin
-  wget $daemon_download_url -O $__upgrades_path/$__upgrade_name/bin/$DAEMON_NAME
+  wget $__daemon_download_url -O $__upgrades_path/$__upgrade_name/bin/$DAEMON_NAME
   echo "Done!"
 elif [ "$__should_update" -eq 1 ]; then
   echo "Updating binary for current version."
-  wget $daemon_download_url -O $__current_path/bin/$DAEMON_NAME
+  wget $__daemon_download_url -O $__current_path/bin/$DAEMON_NAME
   echo "Done!"
 else
   echo "No updates needed."
