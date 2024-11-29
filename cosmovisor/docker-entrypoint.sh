@@ -101,6 +101,7 @@ compare_versions() {
 # Upgrades overview.
 
 # Protocol Upgrades:
+# - In-protocol signaling for the upgrade.
 # - These involve significant changes to the network, such as major or minor version releases.
 # - Stored in a dedicated directory: /cosmos/cosmovisor/{upgrade_name}.
 # - Cosmovisor automatically manages the switch based on the network's upgrade plan.
